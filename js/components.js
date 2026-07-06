@@ -130,6 +130,25 @@ function drawDoorExt(ctx,c,r,glow) {
   ctx.fillStyle=PAL.gold; ctx.beginPath(); ctx.arc(x+TILE-8,y+TILE/2,2,0,Math.PI*2); ctx.fill();
   ctx.beginPath(); ctx.arc(x+8,y+TILE/2,2,0,Math.PI*2); ctx.fill();
 }
+
+function drawEntranceSign(ctx, exteriorMap) {
+  let minC = null, maxC = null, doorRow = null;
+  for (let r=0;r<ROWS;r++) for (let c=0;c<COLS;c++) {
+    if (exteriorMap[r][c]==='door') {
+      if (minC===null || c<minC) minC=c;
+      if (maxC===null || c>maxC) maxC=c;
+      doorRow=r;
+    }
+  }
+  if (minC===null) return;
+  const cx = ((minC+maxC)/2 + 0.5) * TILE;
+  const y = doorRow*TILE - 10;
+  ctx.fillStyle = PAL.gold;
+  ctx.font = 'bold 11px Georgia';
+  ctx.textAlign = 'center';
+  ctx.fillText('INGRESO', cx, y);
+  ctx.textAlign = 'left';
+}
 function drawPediment(ctx) {
   ctx.fillStyle = '#e4e1d6';
   ctx.beginPath();
@@ -144,6 +163,9 @@ function drawPediment(ctx) {
   ctx.font = 'bold 13px Georgia';
   ctx.textAlign = 'center';
   ctx.fillText('MUSEO VIRTUAL DE INNOVACION EDUCATIVA', 14.5*TILE, -0.1*TILE);
+  ctx.font = 'bold 15px Georgia';
+  ctx.fillStyle = PAL.gold;
+  ctx.fillText('BIENVENIDOS', 14.5*TILE, 3.2*TILE);
   ctx.textAlign = 'left';
 }
 
@@ -162,6 +184,7 @@ function drawExterior(ctx, exteriorMap, t, doorGlowRef) {
     else drawGrass(ctx,c,r);
   }
   drawPediment(ctx);
+  drawEntranceSign(ctx, exteriorMap);
   if (doorGlowRef.value > 0) doorGlowRef.value = Math.max(0, doorGlowRef.value - 0.01);
 }
 
