@@ -1,4 +1,4 @@
-// main.js — Logica principal del Museo Virtual: movimiento, camara, interaccion, HUD
+// main.js — Logica principal del Museo Virtual: movimiento, camara con zoom, interaccion, HUD
 document.addEventListener('DOMContentLoaded', () => {
 
 const TILE = 32, COLS = 30, ROWS = 15;
@@ -23,6 +23,37 @@ const player = {
 let doorGlow = 0;
 let transitioning = false;
 
+// ==== CAMARA CON ZOOM QUE SIGUE AL PERSONAJE ====
+const ZOOM = 1.6;
+const camera = { x: player.x + TILE/2, y: player.y + TILE/2 };
+
+function updateCamera() {
+  const targetX = player.x + TILE/2;
+  const targetY = player.y + TILE/2;
+  // suavizado (lerp) para que la camara siga al personaje sin saltos bruscos
+  camera.x += (targetX - camera.x) * 0.12;
+  camera.y += (targetY - camera.y) * 0.12;
+  // limites para que la camara no muestre fuera del mapa
+  const halfW = (canvas.width / ZOOM) / 2;
+  const halfH = (canvas.height / ZOOM) / 2;
+  const mapW = COLS * TILE, mapH = ROWS * TILE;
+  camera.x = Math.max(halfW, Math.min(mapW - halfW, camera.x));
+  camera.y = Math.max(halfH, Math.min(mapH - halfH, camera.y));
+}
+
+function applyCameraTransform() {
+  ctx.save();
+  ctx.translate(canvas.width/2, canvas.height/2);
+  ctx.scale(ZOOM, ZOOM);
+  ctx.translate(-camera.x, -camera.y);
+}
+
+function screenToWorld(px, py) {
+  const wx = (px - canvas.width/2) / ZOOM + camera.x;
+  const wy = (py - canvas.height/2) / ZOOM + camera.y;
+  return { col: Math.floor(wx / TILE), row: Math.floor(wy / TILE) };
+}
+
 // ==== TECLADO ====
 const keys = {};
 window.addEventListener('keydown', (e) => {
@@ -31,7 +62,6 @@ window.addEventListener('keydown', (e) => {
 });
 window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
 
-// Evita que las teclas queden "atascadas" si la ventana pierde el foco
 window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) for (const k in keys) keys[k] = false;
@@ -101,14 +131,14 @@ canvas.addEventListener('click', (e) => {
   const rect = canvas.getBoundingClientRect();
   const scaleX = canvas.width / rect.width;
   const scaleY = canvas.height / rect.height;
-  const cx = Math.floor((e.clientX - rect.left) * scaleX / TILE);
-  const cy = Math.floor((e.clientY - rect.top) * scaleY / TILE);
-  if (cy < 0 || cy >= ROWS || cx < 0 || cx >= COLS) return;
-  const cell = map[cy][cx];
+  const px = (e.clientX - rect.left) * scaleX;
+  const py = (e.clientY - rect.top) * scaleY;
+  const { col, row } = screenToWorld(px, py);
+  if (row < 0 || row >= ROWS || col < 0 || col >= COLS) return;
+  const cell = map[row][col];
   if (typeof cell === 'string') openStation(cell);
 });
 
-// ==== LISTAS LATERALES: clic para abrir ficha directamente ====
 document.querySelectorAll('.sidePanel li[data-key]').forEach(li => {
   li.addEventListener('click', () => openStation(li.dataset.key));
 });
@@ -119,7 +149,6 @@ function updateSideLists() {
   });
 }
 
-// ==== MINIMAPA (NAC / INTL) ====
 function updateMinimap() {
   const mmNac = document.getElementById('mmNac');
   const mmIntl = document.getElementById('mmIntl');
@@ -130,7 +159,6 @@ function updateMinimap() {
   mmIntl.classList.toggle('active', inIntl);
 }
 
-// ==== BARRA DE PROGRESO ====
 function updateProgress() {
   const fill = document.getElementById('progressFill');
   const text = document.getElementById('progressText');
@@ -140,7 +168,6 @@ function updateProgress() {
   text.textContent = `${visited.size}/10 estaciones`;
 }
 
-// ==== TRANSICION EXTERIOR / INTERIOR ====
 function switchScene() {
   transitioning = true;
   fadeEl.style.transition = 'opacity 0.45s ease';
@@ -159,12 +186,13 @@ function switchScene() {
       player.targetX = player.x; player.targetY = player.y;
       sceneLabel.textContent = 'Exterior';
     }
+    camera.x = player.x + TILE/2;
+    camera.y = player.y + TILE/2;
     fadeEl.style.opacity = 0;
     setTimeout(() => { transitioning = false; }, 460);
   }, 460);
 }
 
-// ==== CONTROLES TACTILES (joystick + boton E) ====
 const joystickZone = document.getElementById('joystickZone');
 const joystickStick = document.getElementById('joystickStick');
 const btnAction = document.getElementById('btnAction');
@@ -214,7 +242,6 @@ if (btnAction) {
   btnAction.addEventListener('click', fire);
 }
 
-// ==== BUCLE PRINCIPAL ====
 function handleInput() {
   if (player.moving || transitioning) return;
   if (keys['arrowup'] || keys['w'] || touchDir === 'up') tryMove(0,-1,'up');
@@ -244,12 +271,19 @@ function loop() {
   t += 0.03;
   handleInput();
   updatePlayer();
+  updateCamera();
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  applyCameraTransform();
+
   const doorGlowRef = { value: doorGlow };
   if (scene === 'exterior') drawExterior(ctx, exteriorMap, t, doorGlowRef);
   else drawInterior(ctx, interiorMap, t, visited);
   doorGlow = doorGlowRef.value;
   drawAvatar(ctx, player, TILE);
+
+  ctx.restore();
+
   updateMinimap();
   updateProgress();
   requestAnimationFrame(loop);
