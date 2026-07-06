@@ -26,7 +26,19 @@ document.addEventListener('DOMContentLoaded', () => {
     col:14, row:14, x:14*TILE, y:14*TILE, targetX:14*TILE, targetY:14*TILE,
     dir:'up', moving:false, speed:4, animT:0
   };
-
+const ZOOM = window.innerWidth < 700 ? 1.9 : 1.5;
+let camX = 0, camY = 0;
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+function updateCamera() {
+  const viewW = canvas.width / ZOOM;
+  const viewH = canvas.height / ZOOM;
+  const targetX = player.x + TILE/2 - viewW/2;
+  const targetY = player.y + TILE/2 - viewH/2;
+  const maxX = COLS*TILE - viewW;
+  const maxY = ROWS*TILE - viewH;
+  camX = clamp(targetX, 0, Math.max(0, maxX));
+  camY = clamp(targetY, 0, Math.max(0, maxY));
+}
   // Las estaciones (cuadros) ahora son SÓLIDAS: no se puede caminar sobre ellas,
   // hay que quedar justo al frente para interactuar.
   function isWalkable(c,r) {
@@ -118,9 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // de esa casilla (adyacente, distancia Manhattan = 1). Ya no se puede abrir
   // ninguna galería a distancia.
   canvas.addEventListener('click', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const cx = Math.floor((e.clientX-rect.left)/TILE);
-    const cy = Math.floor((e.clientY-rect.top)/TILE);
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const cx = Math.floor((camX + (e.clientX-rect.left)*scaleX/ZOOM)/TILE);
+  const cy = Math.floor((camY + (e.clientY-rect.top)*scaleY/ZOOM)/TILE);
     if (cy<0||cy>=ROWS||cx<0||cx>=COLS) return;
     const cell = map[cy][cx];
     if (typeof cell!=='string' || !STATIONS[cell]) return;
@@ -185,17 +199,22 @@ document.addEventListener('DOMContentLoaded', () => {
     } else { player.x+=dx/dist*player.speed; player.y+=dy/dist*player.speed; }
   }
 
-  let t=0;
-  function loop() {
-    t+=0.03;
-    handleInput();
-    updatePlayer();
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    if (scene==='exterior') drawExterior(ctx, exteriorMap, t, doorGlowRef);
-    else drawInterior(ctx, interiorMap, t, visited);
-    drawAvatar(ctx, player);
-    requestAnimationFrame(loop);
-  }
+ let t=0;
+function loop() {
+  t+=0.03;
+  handleInput();
+  updatePlayer();
+  updateCamera();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.save();
+  ctx.scale(ZOOM, ZOOM);
+  ctx.translate(-camX, -camY);
+  if (scene==='exterior') drawExterior(ctx, exteriorMap, t, doorGlowRef);
+  else drawInterior(ctx, interiorMap, t, visited);
+  drawAvatar(ctx, player);
+  ctx.restore();
+  requestAnimationFrame(loop);
+}
   updateProgress();
   loop();
   function bindHoldButton(el, onDown, onUp) {
