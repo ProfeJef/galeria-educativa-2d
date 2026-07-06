@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Museo Virtual de Innovación Educativa</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h2>Museo Virtual de Innovación Educativa</h2>
+<div id="stage">
+  <canvas id="game" width="960" height="480"></canvas>
+  <div id="fade"></div>
+  <div id="sceneLabel">Exterior</div>
+</div>
+<div id="hint">Flechas/WASD: mover · camina hasta la puerta para entrar/salir · E o clic en un cuadro: abrir ficha</div>
+
+<div id="modalOverlay">
+  <div id="modalCard"><button id="closeBtn">✕</button><div id="modalBody"></div></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
