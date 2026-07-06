@@ -99,3 +99,27 @@ canvas { background:var(--navy); image-rendering:pixelated; border:4px solid var
   text-transform: uppercase; pointer-events: none; user-select: none;
   z-index: 1;
 }
+#touchControls {
+  display:none;
+  position:absolute; bottom:10px; left:0; right:0;
+  justify-content:space-between; align-items:flex-end;
+  padding:0 14px; pointer-events:none; z-index:50;
+}
+#dpad { position:relative; width:120px; height:120px; pointer-events:auto; }
+.dbtn {
+  position:absolute; width:40px; height:40px; border-radius:8px;
+  background:rgba(16,26,36,0.7); border:1px solid rgba(217,169,85,0.5);
+  color:#f3ecd9; font-size:18px; display:flex; align-items:center; justify-content:center;
+  touch-action:none; user-select:none;
+}
+.dup { top:0; left:40px; } .ddown { top:80px; left:40px; }
+.dleft { top:40px; left:0; } .dright { top:40px; left:80px; }
+#btnAction {
+  pointer-events:auto; width:64px; height:64px; border-radius:50%;
+  background:rgba(217,169,85,0.85); border:2px solid #8a6a2e; color:#101a24;
+  font-weight:700; font-size:18px; touch-action:none;
+}
+@media (max-width:900px), (pointer:coarse) {
+  #touchControls { display:flex; }
+  #hint { display:none; }
+}
