@@ -233,9 +233,10 @@ function drawStatue(ctx,c,r) {
   ctx.fillStyle=PAL.stoneLight; ctx.fillRect(x+7,y+20,18,3);
   ctx.fillStyle='#eceff1';
   ctx.beginPath(); ctx.moveTo(x+11,y+21);
-  function drawGlobe(ctx,c,r) {
-  const isNac=c<15;
-  drawFloorTile(ctx,c,r,isNac);
+  ctx.lineTo(x+21,y+21); ctx.lineTo(x+18,y+13); ctx.lineTo(x+14,y+13);
+  ctx.closePath(); ctx.fill();
+}
+function drawGlobe(ctx,c,r) {
   const x=c*TILE, y=r*TILE;
   ctx.fillStyle='#6d4c41'; ctx.fillRect(x+13,y+24,6,6);
   ctx.strokeStyle='#4e342e'; ctx.lineWidth=2;
@@ -510,4 +511,5 @@ function drawAvatar(ctx, player) {
   ctx.beginPath(); ctx.moveTo(cx-1,cy-15); ctx.lineTo(cx+9,cy-19); ctx.lineTo(cx-1,cy-19); ctx.closePath(); ctx.fill();
   ctx.fillStyle=PAL.gold; ctx.beginPath(); ctx.arc(cx+9,cy-19,1.6,0,Math.PI*2); ctx.fill();
   ctx.restore();
+  
 }
