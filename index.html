@@ -3,24 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Museo Virtual de Innovación Educativa</title>
+<title>Museo Educativo</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<h2>Museo Virtual de Innovación Educativa</h2>
+<h2>MUSEO EDUCATIVO</h2>
 <div id="stage">
   <canvas id="game" width="960" height="480"></canvas>
   <div id="fade"></div>
   <div id="sceneLabel">Exterior</div>
+  <div id="minimap">
+    <div class="zone nac" id="zoneNac">NAC</div>
+    <div class="zone intl" id="zoneIntl">INTL</div>
+  </div>
+  <div id="progressWrap">
+    <div id="progressBar"><div id="progressFill"></div></div>
+    <div id="progressText">0/10 estaciones</div>
+  </div>
 </div>
-<div id="hint">Flechas/WASD: mover · camina hasta la puerta para entrar/salir · E o clic en un cuadro: abrir ficha</div>
+<div id="hint">
+  <span><span class="key">&#8593;</span><span class="key">&#8592;</span><span class="key">&#8595;</span><span class="key">&#8594;</span> o <span class="key">WASD</span> mover</span>
+  <span>Puerta: entrar/salir</span>
+  <span><span class="key">E</span> o clic: abrir ficha</span>
+</div>
 
 <div id="modalOverlay">
-  <div id="modalCard"><button id="closeBtn">✕</button><div id="modalBody"></div></div>
+  <div id="modalCard"><button id="closeBtn">&#10005;</button><div id="modalBody"></div></div>
 </div>
 
 <script src="js/data.js"></script>
 <script src="js/components.js"></script>
 <script src="js/main.js"></script>
+<div id="watermark">Eduquémonos con TICs</div>
 </body>
 </html>
