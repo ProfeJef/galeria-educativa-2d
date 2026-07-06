@@ -143,32 +143,72 @@ canvas#game {
 .sidePanel li.done { color: #d9a955; }
 .sidePanel li.done::after { content: ' \2713'; }
 
-/* En pantallas angostas: franjas horizontales arriba del juego */
+/* ==== REDISEÑO MOVIL DE PANELES LATERALES (chips desplazables) ==== */
 @media (max-width: 1050px) {
-  #museumLayout { flex-direction: column; align-items: stretch; gap: 8px; }
+  #museumLayout { flex-direction: column; align-items: stretch; gap: 10px; padding: 0 4px; }
+  #stage { order: -1; margin: 0 auto; }
+
   .sidePanel {
     width: 100%;
     max-height: none;
+    padding: 8px 0 8px 0;
+    background: rgba(16,26,36,0.6);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: visible;
+  }
+  .sidePanel h3 {
+    font-size: 10px;
+    margin: 0 12px 2px 12px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(217,169,85,0.2);
+    border-right: none;
+    display: block;
+  }
+  .sidePanel ul {
     display: flex;
     gap: 8px;
     overflow-x: auto;
     overflow-y: hidden;
-    white-space: nowrap;
+    padding: 2px 12px 4px 12px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
   }
-  .sidePanel h3 {
+  .sidePanel ul::-webkit-scrollbar { height: 4px; }
+  .sidePanel ul::-webkit-scrollbar-thumb { background: rgba(217,169,85,0.4); border-radius: 4px; }
+
+  .sidePanel li {
     flex-shrink: 0;
-    border-bottom: none;
-    border-right: 1px solid rgba(217,169,85,0.25);
-    padding: 0 10px 0 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
+    scroll-snap-align: start;
+    max-width: 150px;
+    white-space: normal;
+    font-size: 11px;
+    line-height: 1.25;
+    padding: 7px 10px;
+    border-radius: 14px;
+    background: rgba(217,169,85,0.08);
+    border: 1px solid rgba(217,169,85,0.25);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
-  .sidePanel ul { display: flex; gap: 6px; }
-  .sidePanel li { flex-shrink: 0; white-space: nowrap; font-size: 11px; }
-  #stage { order: -1; }
+  .sidePanel.nac li { border-color: rgba(111,125,79,0.4); background: rgba(111,125,79,0.12); }
+  .sidePanel.intl li { border-color: rgba(92,122,148,0.4); background: rgba(92,122,148,0.12); }
+  .sidePanel li.done {
+    background: rgba(217,169,85,0.25);
+    border-color: #d9a955;
+    color: #f3ecd9;
+  }
 }
 
+@media (max-width: 480px) {
+  h1 { font-size: 22px; }
+  .sidePanel li { max-width: 130px; font-size: 10.5px; padding: 6px 9px; }
+  #footerTag { font-size: 10px; letter-spacing: 2px; }
+}
 /* ==== CONTROLES TACTILES: JOYSTICK Y BOTON DE ACCION ==== */
 #touchControls {
   display: none;
