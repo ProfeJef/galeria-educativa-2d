@@ -1,4 +1,4 @@
-// main.js — Bucle principal, control de escenas, input, cámara y modal de estaciones
+// main.js — Bucle principal, control de escenas, input, cámara, joystick, listas laterales y modal de estaciones
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const player = {
     col:14, row:14, x:14*TILE, y:14*TILE, targetX:14*TILE, targetY:14*TILE,
-    dir:'up', moving:false, speed:2.5, animT:0
+    dir:'up', moving:false, speed:4, animT:0
   };
 
   // ==== CÁMARA CON SEGUIMIENTO Y ZOOM ====
@@ -123,6 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
     modalOpen = true;
     visited.add(key);
     updateProgress();
+    document.querySelectorAll('.sidePanel li').forEach(li => {
+      li.classList.toggle('done', visited.has(li.dataset.key));
+    });
   }
   document.getElementById('closeBtn').addEventListener('click', () => {
     document.getElementById('modalOverlay').style.display='none';
@@ -244,16 +247,16 @@ document.addEventListener('DOMContentLoaded', () => {
       keys['arrowleft']=false; keys['arrowright']=false;
     }
     function applyDirection(dx, dy) {
-  const deadzone = 22; // antes 12 — ahora requiere más desplazamiento del dedo para activar
-  const dist = Math.hypot(dx,dy);
-  if (dist < deadzone) { clearDirs(); return; }
-  clearDirs();
-  const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-  if (angle >= -45 && angle < 45) keys['arrowright'] = true;
-  else if (angle >= 45 && angle < 135) keys['arrowdown'] = true;
-  else if (angle >= -135 && angle < -45) keys['arrowup'] = true;
-  else keys['arrowleft'] = true;
-}
+      const deadzone = 22;
+      const dist = Math.hypot(dx,dy);
+      if (dist < deadzone) { clearDirs(); return; }
+      clearDirs();
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      if (angle >= -45 && angle < 45) keys['arrowright'] = true;
+      else if (angle >= 45 && angle < 135) keys['arrowdown'] = true;
+      else if (angle >= -135 && angle < -45) keys['arrowup'] = true;
+      else keys['arrowleft'] = true;
+    }
     function handleMove(clientX, clientY) {
       const rect = base.getBoundingClientRect();
       const cx = rect.left + rect.width/2;
@@ -301,4 +304,19 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAction.addEventListener('touchstart', (e)=>{ e.preventDefault(); interact(); }, {passive:false});
     btnAction.addEventListener('click', interact);
   }
+
+  // ==== LISTAS LATERALES DE ACCESO RAPIDO (complemento del juego, no lo reemplazan) ====
+  (function() {
+    const listNac = document.getElementById('listNac');
+    const listIntl = document.getElementById('listIntl');
+    if (!listNac || !listIntl) return;
+    STATION_ORDER.forEach((key) => {
+      const s = STATIONS[key];
+      const li = document.createElement('li');
+      li.textContent = s.nombre;
+      li.dataset.key = key;
+      li.addEventListener('click', () => openStation(key));
+      if (s.zona === 'nac') listNac.appendChild(li); else listIntl.appendChild(li);
+    });
+  })();
 });
