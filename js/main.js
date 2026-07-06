@@ -30,10 +30,8 @@ const camera = { x: player.x + TILE/2, y: player.y + TILE/2 };
 function updateCamera() {
   const targetX = player.x + TILE/2;
   const targetY = player.y + TILE/2;
-  // suavizado (lerp) para que la camara siga al personaje sin saltos bruscos
   camera.x += (targetX - camera.x) * 0.12;
   camera.y += (targetY - camera.y) * 0.12;
-  // limites para que la camara no muestre fuera del mapa
   const halfW = (canvas.width / ZOOM) / 2;
   const halfH = (canvas.height / ZOOM) / 2;
   const mapW = COLS * TILE, mapH = ROWS * TILE;
@@ -67,12 +65,17 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) for (const k in keys) keys[k] = false;
 });
 
+// FIX: las casillas de estacion (string) y puertas siguen siendo intransitables
+// para que el jugador se detenga frente al cuadro y pueda interactuar con E
 function isWalkable(c, r) {
   if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return false;
   const cell = map[r][c];
+  if (typeof cell === 'string' && cell !== 'door' && cell !== 'exit') return false;
   if (scene === 'exterior') {
+    if (cell === 'door') return false;
     return cell !== 1 && cell !== 3 && cell !== 4 && cell !== 5 && cell !== 6 && cell !== 7;
   }
+  if (cell === 'exit') return false;
   return cell !== 1 && cell !== 7 && cell !== 10 && cell !== 11 && cell !== 12 && cell !== 13 && cell !== 14;
 }
 
@@ -92,7 +95,7 @@ function interact() {
   const tc = player.col + dc, tr = player.row + dr;
   if (tr < 0 || tr >= ROWS || tc < 0 || tc >= COLS) return;
   const cell = map[tr][tc];
-  if (typeof cell === 'string') openStation(cell);
+  if (typeof cell === 'string' && cell !== 'door' && cell !== 'exit') openStation(cell);
   else if (cell === 'door' || cell === 'exit') switchScene();
 }
 
@@ -136,7 +139,7 @@ canvas.addEventListener('click', (e) => {
   const { col, row } = screenToWorld(px, py);
   if (row < 0 || row >= ROWS || col < 0 || col >= COLS) return;
   const cell = map[row][col];
-  if (typeof cell === 'string') openStation(cell);
+  if (typeof cell === 'string' && cell !== 'door' && cell !== 'exit') openStation(cell);
 });
 
 document.querySelectorAll('.sidePanel li[data-key]').forEach(li => {
@@ -258,8 +261,6 @@ function updatePlayer() {
   if (dist <= player.speed) {
     player.x = player.targetX; player.y = player.targetY;
     player.moving = false;
-    const cell = map[player.row][player.col];
-    if (cell === 'door' || cell === 'exit') { doorGlow = 1; switchScene(); }
   } else {
     player.x += dx/dist*player.speed;
     player.y += dy/dist*player.speed;
