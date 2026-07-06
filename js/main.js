@@ -244,15 +244,16 @@ document.addEventListener('DOMContentLoaded', () => {
       keys['arrowleft']=false; keys['arrowright']=false;
     }
     function applyDirection(dx, dy) {
-      clearDirs();
-      const deadzone = 12;
-      if (Math.hypot(dx,dy) < deadzone) return;
-      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-      if (angle >= -45 && angle < 45) keys['arrowright'] = true;
-      else if (angle >= 45 && angle < 135) keys['arrowdown'] = true;
-      else if (angle >= -135 && angle < -45) keys['arrowup'] = true;
-      else keys['arrowleft'] = true;
-    }
+  const deadzone = 22; // antes 12 — ahora requiere más desplazamiento del dedo para activar
+  const dist = Math.hypot(dx,dy);
+  if (dist < deadzone) { clearDirs(); return; }
+  clearDirs();
+  const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+  if (angle >= -45 && angle < 45) keys['arrowright'] = true;
+  else if (angle >= 45 && angle < 135) keys['arrowdown'] = true;
+  else if (angle >= -135 && angle < -45) keys['arrowup'] = true;
+  else keys['arrowleft'] = true;
+}
     function handleMove(clientX, clientY) {
       const rect = base.getBoundingClientRect();
       const cx = rect.left + rect.width/2;
