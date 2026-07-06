@@ -2,7 +2,7 @@
 // Fichas sustentadas en fuentes verificadas: MinTIC, SENA, Fundacion Escuela Nueva,
 // Ministerio de Educacion de Finlandia, High Tech High, Exploratorium, MOE Singapur y NPDL (Michael Fullan)
 const STATIONS = {
-  n1: { zona:'nac', img:'https://images.unsplash.com/photo-1568658176307-e730ceea3576?w=800',
+  n1: { zona:'nac', img:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800',
     categoria:'Urbano',
     nombre:'1. Computadores para Educar - Aulas del Siglo XXI',
     contexto:'Programa social del Gobierno de Colombia, liderado por MinTIC, MEN, Presidencia y el SENA. En sus más de 20 años de operación ha entregado más de 2,2 millones de equipos a cerca de 43.000 sedes educativas públicas, reduciendo la relación de estudiantes por computador de 24 a 4 entre 2010 y 2018.',
@@ -42,7 +42,7 @@ const STATIONS = {
     metodologia:'Esquemas de inversión conjunta con gobernaciones y alcaldías, acompañados de procesos de formación docente para un uso pedagógico sostenible.',
     tics:'Dotación de equipos de cómputo, laboratorios de innovación y contenidos digitales adaptables a distintos contextos culturales y lingüísticos.',
     aportes:'Se articula con la convocatoria nacional "Tecnologías para Aprender", buscando consolidar la tecnología como herramienta clave de transformación educativa en 2025 y años siguientes.' },
-  i1: { zona:'intl', img:'https://images.unsplash.com/photo-1544717305482-2782549b5136?w=800',
+  i1: { zona:'intl', img:'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=800',
     categoria:'Sistema Nacional',
     nombre:'6. Aprendizaje Basado en Fenómenos — Finlandia',
     contexto:'Reforma curricular nacional finlandesa vigente desde agosto de 2016, que introdujo el "Phenomenon-Based Learning" (aprendizaje basado en fenómenos) como política pública obligatoria en todas las escuelas del país para estudiantes de 7 a 16 años.',
