@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Museo Educativo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Museo Virtual de Innovacion Educativa</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,49 +12,61 @@
 
 <div id="museumLayout">
 
-  <aside id="panelNac" class="sidePanel nac">
+  <div class="sidePanel nac">
     <h3>Galerías Nacionales</h3>
-    <ul id="listNac"></ul>
-  </aside>
+    <ul id="listNac">
+      <li data-key="n1">1. Computadores para Educar - Aulas del Siglo XXI</li>
+      <li data-key="n2">2. Escuela Nueva - Modelo de Vicky Colbert</li>
+      <li data-key="n3">3. Tecnoacademias SENA - Ruta STEM</li>
+      <li data-key="n4">4. Diplomado Rural TIC - Educación para la Paz</li>
+      <li data-key="n5">5. Fomento a la Educación con Tecnología</li>
+    </ul>
+  </div>
 
   <div id="stage">
+    <canvas id="game" width="960" height="480"></canvas>
     <div id="sceneLabel">Exterior</div>
     <div id="minimap">
-      <span id="zoneNac">NAC</span>
-      <span id="zoneIntl">INTL</span>
+      <span id="mmNac">NAC</span>
+      <span id="mmIntl">INTL</span>
     </div>
-
-    <canvas id="game" width="960" height="480"></canvas>
-
     <div id="fade"></div>
+    <div id="progressBar"><div id="progressFill"></div></div>
+    <div id="progressText">0/10 estaciones</div>
+  </div>
 
-    <div id="touchControls">
+  <div class="sidePanel intl">
+    <h3>Galerías Internacionales</h3>
+    <ul id="listIntl">
+      <li data-key="i1">6. Aprendizaje Basado en Fenómenos — Finlandia</li>
+      <li data-key="i2">7. High Tech High — San Diego, Estados Unidos</li>
+      <li data-key="i3">8. Tinkering Studio — Exploratorium de San Francisco</li>
+      <li data-key="i4">9. Smart Nation e IT Masterplan — Singapur</li>
+      <li data-key="i5">10. New Pedagogies for Deep Learning (NPDL)</li>
+    </ul>
+  </div>
+
+</div>
+
+<div id="touchControls">
   <div id="joystickZone">
     <div id="joystickBase"><div id="joystickStick"></div></div>
   </div>
   <button id="btnAction">E</button>
 </div>
-    <div id="progressBar">
-      <div id="progressFill"></div>
-      <span id="progressText">0/10 estaciones</span>
-    </div>
-  </div>
 
-  <aside id="panelIntl" class="sidePanel intl">
-    <h3>Galerías Internacionales</h3>
-    <ul id="listIntl"></ul>
-  </aside>
+<p id="controlsLegend">
+  <strong>Joystick:</strong> mover al personaje &nbsp;·&nbsp;
+  <strong>Botón E:</strong> abrir la galería o cruzar la puerta cuando estés cerca
+</p>
 
-</div>
+<p id="hint">
+  <span class="key">WASD</span> / <span class="key">Flechas</span> mover ·
+  <span class="key">E</span> abrir ficha / cruzar puerta ·
+  clic en un cuadro también abre la ficha
+</p>
 
-<div id="hint">
-  <span class="key">&#8593;</span><span class="key">&#8592;</span><span class="key">&#8595;</span><span class="key">&#8594;</span>
-  o <span class="key">WASD</span> mover
-  &nbsp; Puerta: entrar/salir
-  &nbsp; <span class="key">E</span> o clic: abrir ficha
-</div>
-
-<p id="footerTag">EDUQUÉMONOS CON TICS</p>
+<div id="footerTag">EDUQUÉMONOS CON TICS</div>
 
 <div id="modalOverlay">
   <div id="modalCard">
