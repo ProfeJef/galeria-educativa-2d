@@ -198,4 +198,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateProgress();
   loop();
+  function bindHoldButton(el, onDown, onUp) {
+  const start=(e)=>{ e.preventDefault(); onDown(); };
+  const end=(e)=>{ e.preventDefault(); onUp(); };
+  el.addEventListener('touchstart', start, {passive:false});
+  el.addEventListener('touchend', end, {passive:false});
+  el.addEventListener('touchcancel', end, {passive:false});
+  el.addEventListener('mousedown', start);
+  el.addEventListener('mouseup', end);
+  el.addEventListener('mouseleave', end);
+}
+bindHoldButton(document.getElementById('btnUp'),    ()=>keys['arrowup']=true,    ()=>keys['arrowup']=false);
+bindHoldButton(document.getElementById('btnDown'),  ()=>keys['arrowdown']=true,  ()=>keys['arrowdown']=false);
+bindHoldButton(document.getElementById('btnLeft'),  ()=>keys['arrowleft']=true,  ()=>keys['arrowleft']=false);
+bindHoldButton(document.getElementById('btnRight'), ()=>keys['arrowright']=true, ()=>keys['arrowright']=false);
+document.getElementById('btnAction').addEventListener('touchstart', (e)=>{ e.preventDefault(); interact(); }, {passive:false});
+document.getElementById('btnAction').addEventListener('click', interact);
 });
