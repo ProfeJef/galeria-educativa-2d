@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const player = {
     col:14, row:14, x:14*TILE, y:14*TILE, targetX:14*TILE, targetY:14*TILE,
-    dir:'up', moving:false, speed:4, animT:0
+    dir:'up', moving:false, speed:2.5, animT:0
   };
 
   // ==== CÁMARA CON SEGUIMIENTO Y ZOOM ====
