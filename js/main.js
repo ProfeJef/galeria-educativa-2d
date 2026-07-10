@@ -22,7 +22,11 @@ const player = {
 
 let doorGlow = 0;
 let transitioning = false;
-
+transitioning = true;
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('welcomeOverlay').style.display = 'none';
+  transitioning = false;
+});
 // ==== CAMARA CON ZOOM QUE SIGUE AL PERSONAJE ====
 const ZOOM = 1.6;
 const camera = { x: player.x + TILE/2, y: player.y + TILE/2 };
