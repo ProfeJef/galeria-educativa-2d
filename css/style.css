@@ -388,3 +388,29 @@ canvas#game {
 #modalBody.nac .sourceLink a:hover { background: #8a9c62; }
 #modalBody.intl .sourceLink a { background: #5c7a94; color: #f3ecd9; }
 #modalBody.intl .sourceLink a:hover { background: #7a9db8; }
+
+#welcomeOverlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(5,15,30,0.9);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+#welcomeCard {
+  background: #1c2b3a; border: 2px solid #d9a955; border-radius: 12px;
+  max-width: 420px; width: 100%; padding: 26px 28px; text-align: left;
+  color: #f3ecd9; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+#welcomeCard h2 { color: #d9a955; margin: 0 0 10px; font-size: 22px; }
+#welcomeCard h4 { color: #c1694f; text-transform: uppercase; font-size: 13px; margin: 16px 0 8px; }
+#welcomeCard p { line-height: 1.5; font-size: 15px; margin: 0; }
+#welcomeCard ul { list-style: none; margin: 0; padding: 0; }
+#welcomeCard li { font-size: 14px; margin-bottom: 6px; }
+#welcomeCard .key {
+  display: inline-block; background: #101a24; border: 1px solid #5c7a94;
+  border-radius: 4px; padding: 2px 8px; margin-right: 4px; font-size: 12.5px;
+}
+#startBtn {
+  margin-top: 18px; width: 100%; padding: 12px; border: none; border-radius: 24px;
+  background: #d9a955; color: #101a24; font-weight: 700; font-size: 15px; cursor: pointer;
+}
+#startBtn:hover { background: #f0c274; }
